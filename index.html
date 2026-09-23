@@ -173,7 +173,8 @@
 </div>
 
 <script>
-    const SMARTLINK_URL = "https://www.profitableratecpmnetwork.com/dehh48z4?key=c1eab1e66ca41bdcd3e238430d656992"; // Replace with your Adsterra Direct Link
+    // Aapka Adsterra Direct Smartlink
+    const SMARTLINK_URL = "https://www.profitableratecpmnetwork.com/dehh48z4?key=c1eab1e66ca41bdcd3e238430d656992";
 
     let loadedImage = null;
 
@@ -181,7 +182,9 @@
         document.querySelectorAll('.tool-panel').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
         document.getElementById(tabId).classList.add('active');
-        event.target.classList.add('active');
+        if (event && event.target) {
+            event.target.classList.add('active');
+        }
     }
 
     function handleImageUpload(e) {
@@ -251,10 +254,8 @@
         downloadLink.href = canvas.toDataURL('image/png');
         downloadLink.click();
 
-        // Redirect / Open Adsterra Smartlink in New Tab
-        if(SMARTLINK_URL && SMARTLINK_URL !== "YOUR_ADSTERRA_SMARTLINK_HERE") {
-            window.open(SMARTLINK_URL, '_blank');
-        }
+        // Redirect Adsterra Link in New Tab
+        triggerSmartlinkRedirect();
     }
 
     function enhancePrompt() {
@@ -267,10 +268,10 @@
     }
 
     function triggerSmartlinkRedirect() {
-        if(SMARTLINK_URL && SMARTLINK_URL !== "https://www.profitableratecpmnetwork.com/dehh48z4?key=c1eab1e66ca41bdcd3e238430d656992") {
+        if(SMARTLINK_URL && SMARTLINK_URL.startsWith("http")) {
             window.open(SMARTLINK_URL, '_blank');
         } else {
-            alert("Please configure your Adsterra Smartlink URL!");
+            alert("Adsterra Link Missing!");
         }
     }
 </script>
