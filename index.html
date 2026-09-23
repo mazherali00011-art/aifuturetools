@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Future Tools - Free Utilities Hub</title>
+    
+    <!-- 1. PASTE ADSTERRA POPUNDER SCRIPT HERE -->
+
+    <!-- 2. PASTE ADSTERRA SOCIAL BAR SCRIPT HERE -->
+
+    <style>
+        :root { --primary: #6c5ce7; --dark: #0f172a; }
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; padding: 0; }
+        body { background: var(--dark); color: #f8fafc; padding: 20px; min-height: 100vh; }
+        .container { max-width: 800px; margin: 0 auto; }
+        header { text-align: center; padding: 25px 0; }
+        header h1 { font-size: 2.2rem; color: #a29bfe; }
+        
+        .nav-tabs { display: flex; gap: 10px; justify-content: center; margin-bottom: 25px; flex-wrap: wrap; }
+        .tab-btn { background: #1e293b; color: #94a3b8; border: 1px solid #334155; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        
+        .tool-card { display: none; background: #1e293b; padding: 25px; border-radius: 12px; border: 1px solid #334155; }
+        .tool-card.active { display: block; }
+        
+        input, select, textarea { width: 100%; padding: 12px; margin: 10px 0; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 6px; }
+        button.btn-action { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1rem; margin-top: 10px; }
+        button.btn-action:hover { background: #5b4bc4; }
+
+        .unlock-box { display: none; margin-top: 20px; background: #0f172a; padding: 20px; border-radius: 8px; text-align: center; border: 1px dashed #a29bfe; }
+        .smartlink-btn { display: inline-block; background: #22c55e; color: white; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>⚡ AI Future Tools Hub</h1>
+        <p style="color: #94a3b8; margin-top: 5px;">Free Future AI Utilities & Generators</p>
+    </header>
+
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('tab-prompt')">✨ AI Prompt Enhancer</button>
+        <button class="tab-btn" onclick="switchTab('tab-bg')">🖼️ AI BG Remover</button>
+        <button class="tab-btn" onclick="switchTab('tab-directory')">🚀 Top AI Tools</button>
+    </div>
+
+    <!-- Tool 1: AI Prompt Enhancer -->
+    <div id="tab-prompt" class="tool-card active">
+        <h2>✨ AI Prompt Generator</h2>
+        <p style="color: #94a3b8; font-size: 0.9rem;">Simple prompt enter karein, AI isko HD render prompt me badal dega.</p>
+        <input type="text" id="simplePrompt" placeholder="e.g. Cyberpunk car in rain">
+        <select id="promptStyle">
+            <option value="Photorealistic 8K, Unreal Engine 5, cinematic lighting">Photorealistic / Cinematic</option>
+            <option value="Anime style, Studio Ghibli, vibrant colors">Anime / Art</option>
+        </select>
+        <button class="btn-action" onclick="generatePrompt()">Generate HD Prompt</button>
+        <textarea id="promptResult" rows="3" readonly placeholder="Enhanced prompt yahan aayega..."></textarea>
+    </div>
+
+    <!-- Tool 2: AI BG Remover -->
+    <div id="tab-bg" class="tool-card">
+        <h2>🖼️ AI Background Remover</h2>
+        <p style="color: #94a3b8; font-size: 0.9rem;">Image upload karke HD Background remove karein.</p>
+        <input type="file" id="imageInput" accept="image/*">
+        <button class="btn-action" onclick="triggerSmartlinkTimer('AI Image BG Process')">Process & Unlock Download</button>
+    </div>
+
+    <!-- Tool 3: AI Directory -->
+    <div id="tab-directory" class="tool-card">
+        <h2>🚀 Free Future AI Tools Access</h2>
+        <p style="color: #94a3b8;">Premium AI tools, voice cloning, aur generators ka free access.</p>
+        <button class="btn-action" style="margin-top: 15px;" onclick="triggerSmartlinkTimer('VIP AI Access Links')">Unlock VIP Access</button>
+    </div>
+
+    <!-- Smartlink Output Box -->
+    <div id="unlockBox" class="unlock-box">
+        <h3 id="statusTitle">Processing Task...</h3>
+        <p id="timerCountdown" style="font-size: 1.5rem; font-weight: bold; color: #a29bfe; margin: 10px 0;">5</p>
+        <a id="smartlinkButton" href="https://www.profitableratecpmnetwork.com/dehh48z4?key=c1eab1e66ca41bdcd3e238430d656992" target="_blank" class="smartlink-btn" style="display:none;">
+            🔓 Unlock Result & Download Now
+        </a>
+    </div>
+</div>
+
+<script>
+    function switchTab(tabId) {
+        document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        event.target.classList.add('active');
+        document.getElementById('unlockBox').style.display = 'none';
+    }
+
+    function generatePrompt() {
+        let input = document.getElementById('simplePrompt').value;
+        let style = document.getElementById('promptStyle').value;
+        if(!input) { alert("Pehle prompt likhein!"); return; }
+        
+        document.getElementById('promptResult').value = `${input}, ${style}, highly detailed, 8k resolution.`;
+        triggerSmartlinkTimer('4K Rendered Prompt');
+    }
+
+    function triggerSmartlinkTimer(taskName) {
+        const box = document.getElementById('unlockBox');
+        const title = document.getElementById('statusTitle');
+        const countdown = document.getElementById('timerCountdown');
+        const btn = document.getElementById('smartlinkButton');
+
+        box.style.display = 'block';
+        title.innerText = `${taskName} Processing...`;
+        btn.style.display = 'none';
+        countdown.style.display = 'block';
+
+        let seconds = 5;
+        countdown.innerText = seconds;
+
+        let interval = setInterval(() => {
+            seconds--;
+            countdown.innerText = seconds;
+            if(seconds <= 0) {
+                clearInterval(interval);
+                countdown.style.display = 'none';
+                title.innerText = "✅ Tayar Hai! Click Below to Unlock:";
+                btn.style.display = 'inline-block';
+            }
+        }, 1000);
+    }
+</script>
+
+</body>
+</html>
