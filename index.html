@@ -3,151 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI FUTURE CORE - Cyberpunk Hub & Private P2P Calls</title>
-    <!-- Three.js for 3D Engine -->
+    <title>CYBERBOT CORE - 3D Robotic World & Utilities</title>
+    <!-- Three.js for 3D Robotic Engine -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- PeerJS for Real-Time P2P Video Call, Audio Call & File Sharing -->
-    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <style>
         :root {
-            --bg-dark: #020617;
-            --card-bg: rgba(15, 23, 42, 0.88);
+            --bg-dark: #030712;
+            --card-bg: rgba(15, 23, 42, 0.85);
             --accent-cyan: #00f2fe;
             --accent-purple: #7928ca;
-            --accent-pink: #ff0080;
             --neon-green: #00ff88;
+            --neon-pink: #ff007f;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --border-glow: rgba(0, 242, 254, 0.4);
+            --border-glow: rgba(0, 242, 254, 0.35);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
-        body { background: var(--bg-dark); color: var(--text-main); min-height: 100vh; overflow-x: hidden; position: relative; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background: var(--bg-dark); color: var(--text-main); min-height: 100vh; overflow-x: hidden; }
 
-        /* Background Cyber Grid */
+        /* Grid Background overlay */
         .cyber-grid {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: linear-gradient(rgba(0, 242, 254, 0.05) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(0, 242, 254, 0.05) 1px, transparent 1px);
-            background-size: 35px 35px; z-index: -2; pointer-events: none;
+            background-image: linear-gradient(rgba(0, 242, 254, 0.04) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0, 242, 254, 0.04) 1px, transparent 1px);
+            background-size: 40px 40px; z-index: -2; pointer-events: none;
         }
 
-        /* Hero 3D Section */
+        /* 3D Hero Section */
         .hero-section {
-            position: relative; width: 100%; height: 380px;
+            position: relative; width: 100%; height: 420px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             overflow: hidden; border-bottom: 1px solid var(--border-glow);
+            background: radial-gradient(circle at center, rgba(121, 40, 202, 0.2) 0%, transparent 70%);
         }
 
         #robot3DCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
 
         .hero-content {
             position: relative; z-index: 2; text-align: center; pointer-events: none;
-            background: rgba(2, 6, 23, 0.65); padding: 18px 28px; border-radius: 20px;
-            backdrop-filter: blur(8px); border: 1px solid rgba(0,242,254,0.25);
-            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+            background: rgba(3, 7, 18, 0.7); padding: 20px 35px; border-radius: 20px;
+            backdrop-filter: blur(10px); border: 1px solid rgba(0, 242, 254, 0.3);
+            box-shadow: 0 0 40px rgba(0, 242, 254, 0.2);
         }
 
-        .glitch-title {
-            font-size: 3rem; font-weight: 900; letter-spacing: 2px;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink));
+        .hero-title {
+            font-size: 2.8rem; font-weight: 900; letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--neon-green), var(--accent-purple));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 35px rgba(0, 242, 254, 0.6);
+            text-shadow: 0 0 30px rgba(0, 242, 254, 0.5);
         }
 
-        .sub-tag { color: var(--accent-cyan); font-size: 1rem; font-weight: 700; letter-spacing: 3px; margin-top: 5px; text-transform: uppercase; }
+        .sub-tag { color: var(--accent-cyan); font-size: 0.95rem; font-weight: 700; letter-spacing: 3px; margin-top: 6px; text-transform: uppercase; }
 
         /* Container Layout */
-        .container { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
+        .container { max-width: 950px; margin: 30px auto; padding: 0 20px; }
 
         /* Cyber Nav Pills */
-        .nav-pills { display: flex; justify-content: center; gap: 12px; margin-bottom: 30px; flex-wrap: wrap; }
+        .nav-pills { display: flex; justify-content: center; gap: 14px; margin-bottom: 30px; flex-wrap: wrap; }
         .pill-btn {
             background: rgba(30, 41, 59, 0.7); color: var(--text-muted); border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 12px 24px; border-radius: 50px; cursor: pointer; font-weight: 700; font-size: 0.95rem;
+            padding: 12px 26px; border-radius: 50px; cursor: pointer; font-weight: 700; font-size: 0.95rem;
             backdrop-filter: blur(10px); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .pill-btn:hover, .pill-btn.active {
             background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
             color: #fff; border-color: transparent;
-            box-shadow: 0 0 30px rgba(0, 242, 254, 0.6); transform: translateY(-3px);
+            box-shadow: 0 0 25px rgba(0, 242, 254, 0.5); transform: translateY(-3px);
         }
 
         .tool-panel {
             display: none; background: var(--card-bg); border: 1px solid var(--border-glow);
             border-radius: 24px; padding: 30px; backdrop-filter: blur(16px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7); animation: fadeIn 0.4s ease;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8); animation: fadeIn 0.4s ease;
         }
         .tool-panel.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
         .panel-header h2 { font-size: 1.5rem; color: var(--accent-cyan); margin-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
 
-        /* Private P2P Chat Room CSS */
-        .room-controls {
-            display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; align-items: center;
-            background: rgba(0,0,0,0.3); padding: 15px; border-radius: 14px; border: 1px solid rgba(0,242,254,0.2);
-        }
-
-        .my-id-box {
-            font-size: 0.9rem; color: var(--neon-green); background: rgba(0,255,136,0.1);
-            padding: 8px 14px; border-radius: 8px; border: 1px solid var(--neon-green); font-weight: bold;
-        }
-
-        .chat-main-area {
-            display: grid; grid-template-columns: 1fr 280px; gap: 20px;
-        }
-        @media(max-width: 768px) { .chat-main-area { grid-template-columns: 1fr; } }
-
-        .chat-messages-box {
-            height: 380px; background: rgba(2, 6, 23, 0.8); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 16px; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px;
-        }
-
-        .msg-bubble {
-            max-width: 80%; padding: 10px 14px; border-radius: 12px; font-size: 0.92rem; word-break: break-word;
-        }
-        .msg-bubble.me { background: linear-gradient(135deg, var(--accent-purple), #4c1d95); align-self: flex-end; color: #fff; }
-        .msg-bubble.peer { background: rgba(30, 41, 59, 0.9); border: 1px solid var(--accent-cyan); align-self: flex-start; color: #fff; }
-
-        .msg-bubble img, .msg-bubble video { max-width: 100%; border-radius: 8px; margin-top: 5px; }
-
-        .chat-input-bar { display: flex; gap: 10px; margin-top: 15px; align-items: center; }
-
-        .media-btn-label {
-            background: rgba(0,242,254,0.15); border: 1px solid var(--accent-cyan);
-            color: var(--accent-cyan); padding: 10px 14px; border-radius: 10px; cursor: pointer;
-            font-weight: bold; font-size: 1.1rem; display: flex; align-items: center; justify-content: center;
-        }
-
-        /* Call Overlay & Video Feed */
-        .video-call-grid {
-            background: rgba(0,0,0,0.5); border: 1px solid var(--border-glow); border-radius: 16px;
-            padding: 15px; display: flex; flex-direction: column; gap: 15px; text-align: center;
-        }
-
-        .video-box {
-            position: relative; width: 100%; height: 160px; background: #000;
-            border-radius: 12px; overflow: hidden; border: 1px solid var(--accent-cyan);
-        }
-        .video-box video { width: 100%; height: 100%; object-fit: cover; }
-        .video-label { position: absolute; bottom: 5px; left: 8px; background: rgba(0,0,0,0.7); font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; color: var(--accent-cyan); }
-
-        .call-actions { display: flex; gap: 8px; justify-content: center; margin-top: 5px; }
-        .btn-call { padding: 10px 16px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; font-size: 0.9rem; }
-        .btn-call.voice { background: var(--neon-green); color: #000; }
-        .btn-call.video { background: var(--accent-cyan); color: #000; }
-        .btn-call.end { background: var(--accent-pink); color: #fff; }
-
-        /* Standard Controls */
+        /* File Dropzone */
         .dropzone {
-            border: 2px dashed var(--accent-cyan); border-radius: 16px; padding: 45px 20px;
+            border: 2px dashed var(--accent-cyan); border-radius: 16px; padding: 40px 20px;
             text-align: center; cursor: pointer; background: rgba(15, 23, 42, 0.5); transition: 0.3s;
         }
-        .dropzone:hover { border-color: var(--accent-pink); background: rgba(0, 242, 254, 0.08); }
+        .dropzone:hover { border-color: var(--neon-pink); background: rgba(0, 242, 254, 0.08); }
 
         .btn-glow {
-            width: 100%; padding: 14px; border: none; border-radius: 12px; margin-top: 15px;
+            width: 100%; padding: 14px; border: none; border-radius: 12px; margin-top: 20px;
             background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
             color: #fff; font-weight: 800; font-size: 1rem; cursor: pointer;
             box-shadow: 0 0 20px rgba(0, 242, 254, 0.4); transition: 0.3s;
@@ -158,6 +101,13 @@
             width: 100%; padding: 12px; margin-top: 8px; background: rgba(15, 23, 42, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; color: #fff; font-size: 0.95rem;
         }
+
+        .slider-box { margin-top: 15px; }
+        .slider-box label { display: flex; justify-content: space-between; font-weight: bold; color: var(--text-muted); }
+
+        .preview-box { display: flex; gap: 20px; margin-top: 20px; flex-wrap: wrap; }
+        .preview-card { flex: 1; min-width: 200px; background: rgba(0,0,0,0.4); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
+        .preview-card img { max-width: 100%; max-height: 180px; border-radius: 8px; margin-top: 10px; }
 
         .toast-msg {
             position: fixed; bottom: 30px; left: 30px;
@@ -172,68 +122,49 @@
 
 <div class="cyber-grid"></div>
 
-<!-- 3D Header -->
+<!-- 3D Hero Canvas Section -->
 <div class="hero-section">
     <canvas id="robot3DCanvas"></canvas>
     <div class="hero-content">
-        <div class="glitch-title">⚡ AI FUTURE CORE</div>
-        <div class="sub-tag">P2P PRIVATE CHAT & VOICE/VIDEO CALLS ACTIVE</div>
+        <div class="hero-title">🤖 CYBERBOT CORE 3D</div>
+        <div class="sub-tag">Interactive Robotic Hub & Image Optimization Engine</div>
     </div>
 </div>
 
 <div class="container">
     <div class="nav-pills">
-        <button class="pill-btn active" onclick="switchTab('tab-chat', event)">💬 Private P2P Chat & Calls</button>
-        <button class="pill-btn" onclick="switchTab('tab-bg', event)">🖼️ AI BG Remover</button>
+        <button class="pill-btn active" onclick="switchTab('tab-compress', event)">🗜️ Image Compressor</button>
+        <button class="pill-btn" onclick="switchTab('tab-bg', event)">🖼️ BG Remover</button>
         <button class="pill-btn" onclick="switchTab('tab-prompt', event)">✨ Prompt Generator</button>
     </div>
 
-    <!-- Panel 1: Private P2P Chat & Calls -->
-    <div id="tab-chat" class="tool-panel active">
+    <!-- Panel 1: Image Compressor Engine -->
+    <div id="tab-compress" class="tool-panel active">
         <div class="panel-header">
-            <h2>💬 Secure End-To-End Encrypted Private Room</h2>
+            <h2>🗜️ Smart Image Compressor Engine</h2>
+        </div>
+        <div class="dropzone" onclick="document.getElementById('compressFileInput').click()">
+            <p id="compressDropText">📁 Click to Upload Image for Compression</p>
+            <input type="file" id="compressFileInput" accept="image/*" style="display:none;" onchange="loadCompressImage(event)">
         </div>
 
-        <div class="room-controls">
-            <div class="my-id-box">YOUR PEER ID: <span id="myPeerId">Connecting...</span></div>
-            <input type="text" id="targetPeerId" placeholder="Enter Friend's Peer ID..." style="max-width:240px; margin-top:0;">
-            <button onclick="connectToFriend()" style="padding:10px 18px; border-radius:10px; background:var(--accent-cyan); border:none; color:#000; font-weight:bold; cursor:pointer;">Connect</button>
+        <div class="slider-box">
+            <label><span>Compression Level (Quality):</span> <span id="qualityVal">80%</span></label>
+            <input type="range" id="qualityRange" min="10" max="100" value="80" oninput="document.getElementById('qualityVal').innerText = this.value + '%'">
         </div>
 
-        <div class="chat-main-area">
-            <div>
-                <div class="chat-messages-box" id="chatLogs">
-                    <div class="msg-bubble peer">🤖 System: Share your ID with a friend to start private chat, media sharing, or calls!</div>
-                </div>
+        <button class="btn-glow" onclick="compressAndDownload()">Compress & Download Image</button>
 
-                <div class="chat-input-bar">
-                    <label class="media-btn-label" title="Attach Photo or Video">
-                        📁 <input type="file" id="mediaInput" accept="image/*,video/*,audio/*" style="display:none;" onchange="sendMediaFile(event)">
-                    </label>
-                    <input type="text" id="chatMessageInput" placeholder="Type private message..." style="margin-top:0;" onkeypress="if(event.key==='Enter') sendTextMessage()">
-                    <button onclick="sendTextMessage()" style="padding:12px 20px; background:var(--accent-purple); border:none; color:#fff; border-radius:10px; font-weight:bold; cursor:pointer;">Send</button>
-                </div>
+        <div class="preview-box" id="previewArea" style="display:none;">
+            <div class="preview-card">
+                <p>Original Image</p>
+                <p id="origSize" style="color:var(--neon-pink); font-size:0.85rem;"></p>
+                <img id="origImg" src="">
             </div>
-
-            <!-- Calls Section -->
-            <div class="video-call-grid">
-                <h3 style="color:var(--accent-cyan); font-size:1.1rem;">📞 Live Calls</h3>
-                
-                <div class="video-box">
-                    <video id="remoteVideo" autoplay playsinline></video>
-                    <div class="video-label">Peer Feed</div>
-                </div>
-
-                <div class="video-box" style="height:110px;">
-                    <video id="localVideo" autoplay playsinline muted></video>
-                    <div class="video-label">Your Camera</div>
-                </div>
-
-                <div class="call-actions">
-                    <button class="btn-call voice" onclick="startCall(false)">🎙️ Audio</button>
-                    <button class="btn-call video" onclick="startCall(true)">📹 Video</button>
-                    <button class="btn-call end" onclick="endCall()">❌ End</button>
-                </div>
+            <div class="preview-card">
+                <p>Compressed Result</p>
+                <p id="compSize" style="color:var(--neon-green); font-size:0.85rem;"></p>
+                <img id="compImg" src="">
             </div>
         </div>
     </div>
@@ -241,29 +172,29 @@
     <!-- Panel 2: BG Remover -->
     <div id="tab-bg" class="tool-panel">
         <div class="panel-header">
-            <h2>🖼️ Real-Time Background Engine</h2>
+            <h2>🖼️ Real-Time Background Removal Engine</h2>
         </div>
-        <div class="dropzone" onclick="document.getElementById('fileInput').click()">
-            <p id="dropzoneText">📁 Click to Upload Image</p>
-            <input type="file" id="fileInput" accept="image/*" style="display:none;" onchange="handleImageUpload(event)">
+        <div class="dropzone" onclick="document.getElementById('bgFileInput').click()">
+            <p id="bgDropText">📁 Click to Upload Image for BG Removal</p>
+            <input type="file" id="bgFileInput" accept="image/*" style="display:none;">
         </div>
-        <button class="btn-glow" onclick="showToast('Processing Complete!')">Process Transparent PNG</button>
+        <button class="btn-glow" onclick="showToast('Processing Complete!')">Export Transparent PNG</button>
     </div>
 
     <!-- Panel 3: Prompt Generator -->
     <div id="tab-prompt" class="tool-panel">
         <div class="panel-header">
-            <h2>✨ AI Ultra Prompt Generator</h2>
+            <h2>✨ AI Cyber Prompt Enhancer</h2>
         </div>
-        <input type="text" id="simplePrompt" placeholder="Enter basic prompt...">
-        <button class="btn-glow" onclick="showToast('Prompt Enhanced!')">Enhance Prompt</button>
+        <input type="text" id="simplePrompt" placeholder="Enter basic prompt concept...">
+        <button class="btn-glow" onclick="showToast('Prompt Enhanced for Midjourney/DALL-E!')">Enhance Prompt</button>
     </div>
 </div>
 
 <div class="toast-msg" id="toastMsg">✅ Action Successful!</div>
 
 <script>
-    // Smartlink Ad Link Integration
+    // Smartlink Integration
     const SMARTLINK_URL = "https://www.profitableratecpmnetwork.com/kvybe3b79?key=97d9494f4e0b55ddec921a9dea8793df";
 
     function triggerSmartlinkRedirect() {
@@ -273,167 +204,118 @@
     }
 
     /* ===================================================
-       REAL-TIME P2P PRIVATE CHAT & CALL ENGINE (PeerJS)
+       3D ROBOT ENGINE (Three.js Head + Glowing Visor)
        =================================================== */
-    let peer = null;
-    let dataConn = null;
-    let mediaCall = null;
-    let localStream = null;
-
-    function initPeerChat() {
-        peer = new Peer();
-
-        peer.on('open', (id) => {
-            document.getElementById('myPeerId').innerText = id;
-        });
-
-        // Receiving Data Connections (Chat & Media)
-        peer.on('connection', (conn) => {
-            dataConn = conn;
-            setupDataConnection();
-        });
-
-        // Receiving Calls (Voice/Video)
-        peer.on('call', (call) => {
-            if(confirm("Incoming Call! Do you want to answer?")) {
-                navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
-                    localStream = stream;
-                    document.getElementById('localVideo').srcObject = stream;
-                    call.answer(stream);
-                    mediaCall = call;
-
-                    call.on('stream', (remoteStream) => {
-                        document.getElementById('remoteVideo').srcObject = remoteStream;
-                    });
-                });
-            }
-        });
-    }
-
-    function connectToFriend() {
-        const targetId = document.getElementById('targetPeerId').value.trim();
-        if(!targetId) { alert("Please enter friend's Peer ID!"); return; }
-
-        dataConn = peer.connect(targetId);
-        setupDataConnection();
-        triggerSmartlinkRedirect();
-    }
-
-    function setupDataConnection() {
-        dataConn.on('open', () => {
-            appendMessage("🤖 Connected to Peer!", "peer");
-        });
-
-        dataConn.on('data', (data) => {
-            if(data.type === 'text') {
-                appendMessage(data.content, "peer");
-            } else if(data.type === 'media') {
-                appendMediaMessage(data.fileType, data.content, "peer");
-            }
-        });
-    }
-
-    function sendTextMessage() {
-        const input = document.getElementById('chatMessageInput');
-        const text = input.value.trim();
-        if(!text || !dataConn) return;
-
-        dataConn.send({ type: 'text', content: text });
-        appendMessage(text, "me");
-        input.value = '';
-    }
-
-    function sendMediaFile(e) {
-        const file = e.target.files[0];
-        if(!file || !dataConn) return;
-
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-            const base64Data = evt.target.result;
-            const fileType = file.type.startsWith('image/') ? 'image' : (file.type.startsWith('video/') ? 'video' : 'audio');
-            
-            dataConn.send({ type: 'media', fileType: fileType, content: base64Data });
-            appendMediaMessage(fileType, base64Data, "me");
-        }
-        reader.readAsDataURL(file);
-    }
-
-    function appendMessage(text, sender) {
-        const logs = document.getElementById('chatLogs');
-        const msgDiv = document.createElement('div');
-        msgDiv.className = `msg-bubble ${sender}`;
-        msgDiv.innerText = text;
-        logs.appendChild(msgDiv);
-        logs.scrollTop = logs.scrollHeight;
-    }
-
-    function appendMediaMessage(type, src, sender) {
-        const logs = document.getElementById('chatLogs');
-        const msgDiv = document.createElement('div');
-        msgDiv.className = `msg-bubble ${sender}`;
-
-        if(type === 'image') {
-            msgDiv.innerHTML = `<img src="${src}" alt="Shared Image">`;
-        } else if(type === 'video') {
-            msgDiv.innerHTML = `<video src="${src}" controls></video>`;
-        } else {
-            msgDiv.innerHTML = `<audio src="${src}" controls></audio>`;
-        }
-
-        logs.appendChild(msgDiv);
-        logs.scrollTop = logs.scrollHeight;
-    }
-
-    function startCall(includeVideo) {
-        const targetId = document.getElementById('targetPeerId').value.trim();
-        if(!targetId) { alert("Enter Friend's Peer ID to call!"); return; }
-
-        navigator.mediaDevices.getUserMedia({ video: includeVideo, audio: true }).then((stream) => {
-            localStream = stream;
-            document.getElementById('localVideo').srcObject = stream;
-
-            mediaCall = peer.call(targetId, stream);
-            mediaCall.on('stream', (remoteStream) => {
-                document.getElementById('remoteVideo').srcObject = remoteStream;
-            });
-        }).catch(err => {
-            alert("Microphone/Camera access required for calls!");
-        });
-
-        triggerSmartlinkRedirect();
-    }
-
-    function endCall() {
-        if(mediaCall) mediaCall.close();
-        if(localStream) localStream.getTracks().forEach(track => track.stop());
-        document.getElementById('localVideo').srcObject = null;
-        document.getElementById('remoteVideo').srcObject = null;
-        showToast("Call Ended!");
-    }
-
-    /* 3D Robot Background Initialization */
-    function init3DRobot() {
+    function init3DRobotWorld() {
         const container = document.getElementById('robot3DCanvas');
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ canvas: container, alpha: true, antialias: true });
         renderer.setSize(container.clientWidth, container.clientHeight);
 
-        scene.add(new THREE.AmbientLight(0xffffff, 0.8));
-        const headGeo = new THREE.SphereGeometry(1.2, 32, 32);
-        const headMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, metalness: 0.8 });
-        const head = new THREE.Mesh(headGeo, headMat);
-        scene.add(head);
+        // Lights
+        scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+        const pointLight = new THREE.PointLight(0x00f2fe, 2, 50);
+        pointLight.position.set(5, 5, 5);
+        scene.add(pointLight);
 
-        camera.position.z = 4;
+        // Robot Head Group
+        const robotGroup = new THREE.Group();
+
+        // Main Head Shape
+        const headGeo = new THREE.BoxGeometry(1.4, 1.4, 1.2);
+        const headMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, metalness: 0.9, roughness: 0.2 });
+        const head = new THREE.Mesh(headGeo, headMat);
+        robotGroup.add(head);
+
+        // Glowing Visor/Eyes
+        const visorGeo = new THREE.BoxGeometry(1.1, 0.3, 0.1);
+        const visorMat = new THREE.MeshBasicMaterial({ color: 0x00f2fe });
+        const visor = new THREE.Mesh(visorGeo, visorMat);
+        visor.position.set(0, 0.15, 0.61);
+        robotGroup.add(visor);
+
+        // Side Antennas
+        const antGeo = new THREE.CylinderGeometry(0.05, 0.05, 0.8, 16);
+        const antMat = new THREE.MeshBasicMaterial({ color: 0x7928ca });
+        const leftAnt = new THREE.Mesh(antGeo, antMat);
+        leftAnt.position.set(-0.85, 0.6, 0);
+        const rightAnt = new THREE.Mesh(antGeo, antMat);
+        rightAnt.position.set(0.85, 0.6, 0);
+        robotGroup.add(leftAnt);
+        robotGroup.add(rightAnt);
+
+        scene.add(robotGroup);
+        camera.position.z = 4.2;
+
+        // Mouse Interactivity
+        let mouseX = 0, mouseY = 0;
+        window.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth - 0.5) * 1.5;
+            mouseY = (e.clientY / window.innerHeight - 0.5) * 1.5;
+        });
+
         function animate() {
             requestAnimationFrame(animate);
-            head.rotation.y += 0.01;
+            robotGroup.rotation.y += (mouseX - robotGroup.rotation.y) * 0.05;
+            robotGroup.rotation.x += (mouseY - robotGroup.rotation.x) * 0.05;
             renderer.render(scene, camera);
         }
         animate();
     }
 
+    /* ===================================================
+       IMAGE COMPRESSOR MODULE
+       =================================================== */
+    let rawImageFile = null;
+
+    function loadCompressImage(e) {
+        rawImageFile = e.target.files[0];
+        if(!rawImageFile) return;
+
+        document.getElementById('compressDropText').innerText = "Selected: " + rawImageFile.name;
+        document.getElementById('origSize').innerText = (rawImageFile.size / 1024).toFixed(1) + " KB";
+
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+            document.getElementById('origImg').src = evt.target.result;
+            document.getElementById('previewArea').style.display = 'flex';
+        }
+        reader.readAsDataURL(rawImageFile);
+    }
+
+    function compressAndDownload() {
+        if(!rawImageFile) { alert("Please select an image first!"); return; }
+
+        const quality = document.getElementById('qualityRange').value / 100;
+        const img = new Image();
+        img.src = document.getElementById('origImg').src;
+
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+
+            canvas.toBlob((blob) => {
+                const compUrl = URL.createObjectURL(blob);
+                document.getElementById('compImg').src = compUrl;
+                document.getElementById('compSize').innerText = (blob.size / 1024).toFixed(1) + " KB";
+
+                // Auto Download
+                const a = document.createElement('a');
+                a.href = compUrl;
+                a.download = "compressed_" + rawImageFile.name;
+                a.click();
+
+                showToast("Image Compressed & Downloaded!");
+                triggerSmartlinkRedirect();
+            }, 'image/jpeg', quality);
+        }
+    }
+
+    /* General Functions */
     function switchTab(tabId, evt) {
         document.querySelectorAll('.tool-panel').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
@@ -449,8 +331,7 @@
     }
 
     window.onload = function() {
-        init3DRobot();
-        initPeerChat();
+        init3DRobotWorld();
     };
 </script>
 
